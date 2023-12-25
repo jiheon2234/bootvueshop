@@ -11,6 +11,7 @@
             <a href="#" class="btn btn-secondary my-2">Secondary action</a>
           </p>
         </div>
+        Ï
       </div>
     </section>
 
@@ -19,8 +20,9 @@
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
-          <div class="col" v-for="i in 12" :key="i">
-            <Card/>
+          <div class="col" v-for="(item, idx) in state.items" :key="idx">
+            {{item}}
+            <Card :item="item"/>
           </div>
         </div>
       </div>
@@ -30,11 +32,23 @@
 </template>
 
 <script>
+import axios from "axios";
+import {reactive} from "vue";
 import Card from "@/components/Card.vue";
 
 export default {
   name: "Home",
-  components: {Card}
+  components: {Card},
+  setup() {
+    const state = reactive({
+      items: []
+    })
+
+    axios.get("/api/items").then(({data}) => {
+      state.items = data
+    })
+    return {state}
+  }
 }
 </script>
 
