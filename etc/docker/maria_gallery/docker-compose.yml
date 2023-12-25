@@ -1,0 +1,10 @@
+version: "3"
+services:
+  fcs_services:
+    image: maria_gallery
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - 3306:3306
+    restart: on-failure #always
+    container_name: maria_gallery
