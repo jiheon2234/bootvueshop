@@ -25,6 +25,8 @@
 <script>
 import {reactive} from "vue";
 import axios from "axios";
+import store from "@/scripts/store";
+import router from "@/scripts/router";
 
 
 export default {
@@ -37,11 +39,13 @@ export default {
     })
 
     const submit = ()=>{
-      axios.post("/api/account/login", state.form).then((res) => {
-        console.log(res);
-        alert('로그인');
-      })
-          .catch(e=> console.log(e))
+      axios.post("/api/account/login", state.form)
+          .then((res) => {
+            store.commit('setAccount',res.data)
+            sessionStorage.setItem("id",res.data)
+            router.push("/")
+            alert('로그인');
+        }).catch(() => {alert('login failed ㅠㅠ')})
     }
 
     return {state, submit};
