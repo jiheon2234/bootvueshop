@@ -1,21 +1,21 @@
 package org.jiheon.shop.springandvueshop.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.jiheon.shop.springandvueshop.entity.Item;
+import org.jiheon.shop.springandvueshop.repository.ItemRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class ItemController {
-    @GetMapping("/api/items")
-    public List<String> getItems(){
-        ArrayList<String> items = new ArrayList<>();
-        items.add("test1");
-        items.add("test2");
-        items.add("test3");
 
-        return items;
+    private final ItemRepository itemRepository;
+    @GetMapping("/api/items")
+    public List<Item> getItems(){
+        return itemRepository.findAll();
     }
 
 }
