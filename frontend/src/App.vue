@@ -1,13 +1,12 @@
 <template>
   <Header/>
-<Home/>
+  <RouterView/>
   <Footer/>
 
 </template>
 
 <script>
 
-import Home from "@/pages/Home.vue";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 
@@ -16,7 +15,6 @@ export default {
   components: {
     Footer,
     Header,
-    Home,
   }
 }
 </script>
