@@ -29,7 +29,7 @@ public class JwtServiceImpl implements JwtService{
         HashMap<String, String> headerMap = new HashMap<>();
 
         Date expTime = new Date();
-        expTime.setTime(expTime.getTime()+ 1000*60*20);
+        expTime.setTime(expTime.getTime()+ 1000*60*200);
         return  Jwts.builder()
                 .header()
                 .add("typ", "JWT")
@@ -48,8 +48,6 @@ public class JwtServiceImpl implements JwtService{
                 Claims payload = Jwts.parser().verifyWith(SECRET_KEY)
                         .build().parseSignedClaims(token)
                         .getPayload();
-                System.out.println("payload = " + payload);
-                System.out.println("payload.getId() = " + payload.getId());
                 return Optional.of(payload);
             }catch (ExpiredJwtException e){
                 log.info("만료됨");
@@ -58,5 +56,18 @@ public class JwtServiceImpl implements JwtService{
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public boolean isValid(String token) {
+        return this.getClaims(token).isPresent();
+    }
+
+    @Override
+    public int getId(String token) {
+        Object id = getClaims(token)
+                .map(claims -> claims.get("id"))
+                .orElse("0");
+        return Integer.parseInt(id.toString());
     }
 }
