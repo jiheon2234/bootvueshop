@@ -8,23 +8,20 @@ import org.jiheon.shop.springandvueshop.repository.MemberRepository;
 import org.jiheon.shop.springandvueshop.service.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/account")
 public class AccountController {
 
     private final MemberRepository memberRepository;
     private final JwtService jwtService;
 
-    @PostMapping("/account/login")
-    public ResponseEntity<?> login(@RequestBody Map<String,String> params, HttpServletResponse res){
+    @PostMapping("/login")
+    public ResponseEntity<Integer> login(@RequestBody Map<String,String> params, HttpServletResponse res){
 //        String token = memberRepository.findByEmailAndPassword(params.get("email"), params.get("password"))
 //                .map((member) -> jwtService.getToken("id", member.getId()))
 //                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -43,4 +40,16 @@ public class AccountController {
     }
 
 
+    @GetMapping("/check")
+    public ResponseEntity<Integer> check(@CookieValue(value = "token", required = false) String token) {
+try {
+    String stringId = jwtService.getClaims(token)
+            .map(claims -> claims.get("id").toString())
+            .orElse("0");
+    return new ResponseEntity<>(Integer.parseInt(stringId), HttpStatus.OK);
+}catch (Exception e){
+    System.out.println("e = " + e);
+    return new ResponseEntity<>(null,HttpStatus.OK);
+}
+    }
 }
