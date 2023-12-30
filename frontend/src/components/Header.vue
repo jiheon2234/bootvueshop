@@ -6,8 +6,8 @@
           <div class="col-sm-4  py-4">
             <h4 class="text-white">사이트맵</h4>
             <ul class="list-unstyled">
-              <li>
-                <router-link to="/" class="text-white">메인화면</router-link>
+              <li v-if="$store.state.accounts.id">
+                <router-link to="/orders" class="text-white">주문내역</router-link>
               </li>
               <li>
                 <router-link to="/login" class="text-white" v-if="!$store.state.accounts.id">로그인</router-link>

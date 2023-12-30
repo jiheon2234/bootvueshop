@@ -18,7 +18,7 @@ public class Cart {
     @Column
     private int memberId;
 
+    @Column
     private int itemId;
-
 
 }
