@@ -6,11 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.jiheon.shop.springandvueshop.entity.Member;
 import org.jiheon.shop.springandvueshop.repository.MemberRepository;
 import org.jiheon.shop.springandvueshop.service.JwtService;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +38,18 @@ public class AccountController {
         cookie.setPath("/");
         res.addCookie(cookie);
 
-        return  new ResponseEntity<>(member.getId(),HttpStatus.OK);
+        return  new ResponseEntity<>(member.getId(), OK);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> login(HttpServletResponse res){
+        ResponseCookie token = ResponseCookie.from("token", "")
+                .path("/")
+                .maxAge(0)
+                .build();
+
+
+        return ResponseEntity.ok().header("Set-cookie",token.toString()).build();
     }
 
 
@@ -46,10 +59,10 @@ try {
     String stringId = jwtService.getClaims(token)
             .map(claims -> claims.get("id").toString())
             .orElse("0");
-    return new ResponseEntity<>(Integer.parseInt(stringId), HttpStatus.OK);
+    return new ResponseEntity<>(Integer.parseInt(stringId), OK);
 }catch (Exception e){
     System.out.println("e = " + e);
-    return new ResponseEntity<>(null,HttpStatus.OK);
+    return new ResponseEntity<>(null, OK);
 }
     }
 }
